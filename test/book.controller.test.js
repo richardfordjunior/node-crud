@@ -6,9 +6,10 @@ const chai = require('chai')
 const expect = chai.expect;
 
 after(done => {
-  server.close();
+ server.close();
   done();
 });
+
 describe("#Testing the books API", () => {
   it("tests our testing framework is working", () => {
     expect(2).eql(2)
@@ -29,13 +30,13 @@ describe("#Testing the books API", () => {
               expect(response.body.status).toBe('Ok');
               expect(response.data).to.eql('My new book 15');
             })
-        }
-        done()
+        }   
       })
+    done()
   });
 
 
-  it("should raise an error when a selected book for deletion does not exxist", (done) => {
+  it("should raise an error when a selected book for deletion does not exist", (done) => {
     let body = { book: 'Test book 15' }
     request
       .delete('/api/book')
@@ -48,7 +49,7 @@ describe("#Testing the books API", () => {
   });
 
 
-  it("should delete a book from the books list", async (done) => {
+  it("should delete a book from the books list", (done) => {
     const body = {
       book: "My new book 15"
     }
@@ -65,12 +66,12 @@ describe("#Testing the books API", () => {
             .delete('/api/book')
             .send(deleteBody)
             .expect(204)
+          .end(done)
         }
-      })
-    done()
+      });
   });
 
-  it("should update a book title", async (done) => {
+  it("should update a book title",  (done) => {
     const body = {
       original_book: 'Book1',
       new_book: 'My new title'
@@ -85,7 +86,7 @@ describe("#Testing the books API", () => {
     done()
   });
 
-  it("should create a new book", async (done) => {
+  it("should create a new book", (done) => {
     const body = {
       book: "My new book 15"
     }
@@ -100,7 +101,7 @@ describe("#Testing the books API", () => {
       })
   });
 
-  it("should save a book to the psuedo-database", async (done) => {
+  it("should save a book to the psuedo-database", (done) => {
     const body = {
       book: "My new book 1"
     }
@@ -109,7 +110,6 @@ describe("#Testing the books API", () => {
       .send(body)
       .expect(200)
       .then(res => {
-        console.log(res.body.data)
         expect(res.body.message).toEql('Book has been updated.')
         expect(res.body.data).to.haveOwnProperty('timeElapsed')
         expect(res.body.data).to.haveOwnProperty('title')
