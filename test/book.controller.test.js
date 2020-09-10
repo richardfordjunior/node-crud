@@ -6,16 +6,6 @@ const chai = require('chai')
 const expect = chai.expect;
 const assert = require('assert');
 
-after(done => {
-  server.close();
-  done();
-});
-
-before((done) => {
-  server.close()
-  done()
-})
-
 describe("#Books API", () => {
   it("tests our testing framework is working", () => {
     expect(2).eql(2)
