@@ -70,19 +70,33 @@ describe("#Books API", () => {
   });
 
   it("should update a book title", async () => {
+
     const body = {
-      original_book: 'Book1',
-      new_book: 'My new title'
+      original_book: 'My new book 15',
+      new_book: 'My new book 16'
     }
     const res = await request
       .patch('/api/book')
       .send(body)
       .expect(200)
     expect(res.body.status).to.eql('Ok')
+    expect(res.body.data[0]).to.eql(body.new_book)
+  });
+
+  it("should not update a book title when new title is not provided", async () => {
+
+    const body = {
+      original_book: 'My new book 15',
+      new_book: ''
+    }
+    const res = await request
+      .patch('/api/book')
+      .send(body)
+      .expect(400)
+    expect(res.body.message).to.eql('Book title cannot be empty!')
   });
 
   it("should create a new book", async () => {
-    require('./../server').server;
     const body = {
       book: "My new book"
     }
@@ -103,6 +117,8 @@ describe("#Books API", () => {
       .send(body)
     expect(res.body.message).to.eql('Book has been updated.')
     expect(res.body.data).to.be.an('array')
+    expect(res.body.data[2]).to.be.an('object')
+    expect(res.body.data[2]).to.haveOwnProperty('timeElapsed')
     expect(res.body.data.length).to.eql(3)
   });
 });
