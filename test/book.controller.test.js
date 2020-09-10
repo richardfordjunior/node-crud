@@ -6,14 +6,20 @@ const chai = require('chai')
 const expect = chai.expect;
 
 after(done => {
- server.close();
+  server.close();
   done();
 });
 
-describe("#Testing the books API", () => {
+before((done) => {
+  server.close()
+  done()
+})
+
+describe("#Books API", () => {
   it("tests our testing framework is working", () => {
     expect(2).eql(2)
   })
+
   it("should return the books list", (done) => {
     const body = {
       book: "My new book 15"
@@ -30,7 +36,7 @@ describe("#Testing the books API", () => {
               expect(response.body.status).toBe('Ok');
               expect(response.data).to.eql('My new book 15');
             })
-        }   
+        }
       })
     done()
   });
@@ -66,12 +72,12 @@ describe("#Testing the books API", () => {
             .delete('/api/book')
             .send(deleteBody)
             .expect(204)
-          .end(done)
         }
+        done()
       });
   });
 
-  it("should update a book title",  (done) => {
+  it("should update a book title", (done) => {
     const body = {
       original_book: 'Book1',
       new_book: 'My new title'
@@ -94,11 +100,11 @@ describe("#Testing the books API", () => {
       .post('/api/book')
       .send(body)
       .expect(201)
-      .end(done)
       .then(response => {
         expect(response.body.status).toBe('Ok');
         expect(response.message).toEql('New book: "My new book 15" added successfully.')
       })
+    done()
   });
 
   it("should save a book to the psuedo-database", (done) => {
