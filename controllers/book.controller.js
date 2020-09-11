@@ -68,12 +68,14 @@ exports.patch = (req, res) => {
   }
 };
 
-exports.get = (req, res) => { 
-  let allBooks = getBookList(booksArrayList);
-  res.status(200).send({
-    status: 'Ok',
-    data: allBooks
-  });
+exports.get = (req, res) => {
+  getBookList(booksArrayList)
+    .then(books => {
+      res.status(200).send({
+        status: 'Ok',
+        data: books
+      })
+    });
 };
 
 exports.put = (req, res) => {
@@ -110,6 +112,13 @@ let saveItemOnDatabase = (title) => {
   })
 }
 
- let getBookList = (list) => {
-  return list.join(';');
+let getBookList = (list = Array(), index = 0) => {
+  let resultString = '';
+  let lastDelimiter = 0;
+  for (let k = index; k < list.length; k++) {
+    resultString += list.length > 1 ? list[k] + "," : list[k]
+    lastDelimiter = resultString.lastIndexOf(',');
+  }
+  resultString = resultString.substring(0, lastDelimiter);
+  return Promise.resolve(resultString)
 }
